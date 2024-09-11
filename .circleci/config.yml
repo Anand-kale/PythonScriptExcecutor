@@ -1,28 +1,31 @@
 version: 2.1
 
 jobs:
-  run-main-py:
+  BotMonitoring:
     docker:
-      - image: cimg/python:3.9  # Use the appropriate Python version
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
-          name: "Run main.py every 5 minutes"
+          name: Run Python script every 5 minutes
           command: |
             while true; do
-              python main.py
-              sleep 300  # 300 seconds equals 5 minutes
+              python3 main.py
+              sleep 300  # 300 seconds = 5 minutes
             done
 
 workflows:
   version: 2
-  scheduled-run:
+  commit-workflow:
+    jobs:
+      - BotMonitoring
+  schedule-BotMonitoring:
     triggers:
       - schedule:
-          cron: "0 * * * *"  # Runs every hour
+          cron: "0 * * * *"  # Trigger every hour
           filters:
             branches:
               only:
                 - main
     jobs:
-      - run-main-py
+      - BotMonitoring
