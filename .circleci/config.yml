@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   run-script:
     docker:
-      - image: cimg/python:3.9  # Use a Python Docker image
+      - image: cimg/python:3.9
     steps:
       - checkout
       - run:
@@ -15,10 +15,10 @@ workflows:
   run-on-current-branch:
     triggers:
       - schedule:
-          cron: "00,05,10,15,20,25,30,35,40,45,50,55 * * * *"  # Runs every 5 minutes
+          cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
           filters:
             branches:
               only:
-                - "<< pipeline.git.branch >>"  # Use the current branch
+                - << pipeline.git.branch >>
     jobs:
       - run-script
