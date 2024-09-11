@@ -14,8 +14,8 @@ workflows:
   version: 2
   commit-workflow:
     jobs:
-      - BotMonitoring
-  schedule-BotMonitoring:
+      - BotMonitoring5
+  schedule-BotMonitoring5:
     triggers:
       - schedule:
           cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
@@ -24,4 +24,4 @@ workflows:
               only:
                 - main
     jobs:
-      - BotMonitoring
+      - BotMonitoring5
