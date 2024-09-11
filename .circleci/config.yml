@@ -3,28 +3,15 @@ version: 2.1
 jobs:
   run-script:
     docker:
-      - image: cimg/python:3.9  # Use a Python Docker image
+      - image: cimg/python:3.9
     steps:
       - checkout
       - run:
-          name: Install dependencies
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-      - run:
-          name: Run main.py
+          name: Run Python script
           command: python main.py
 
 workflows:
   version: 2
-  schedule-workflow:
-    triggers:
-      - schedule:
-          cron: "00,05,10,15,20,25,30,35,40,45,50,55 * * * *"  # Runs every 5 minutes
-          filters:
-            branches:
-              only:
-                - "<< pipeline.git.branch >>"  # Use the current branch
+  run-on-current-branch:
     jobs:
       - run-script
