@@ -1,24 +1,27 @@
 version: 2.1
 
 jobs:
-  run-script:
+  BotMonitoring:
     docker:
-      - image: cimg/python:3.9
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
           name: Run Python script
-          command: python main.py
+          command: python3 main.py
 
 workflows:
   version: 2
-  run-on-current-branch:
+  commit-workflow:
+    jobs:
+      - BotMonitoring
+  schedule-BotMonitoring:
     triggers:
       - schedule:
           cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
           filters:
             branches:
               only:
-                - << pipeline.git.branch >>
+                - main
     jobs:
-      - run-script
+      - BotMonitoring
