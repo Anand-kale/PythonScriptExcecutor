@@ -1,24 +1,30 @@
 version: 2.1
 
 jobs:
-  say-hello:
+  run-script:
     docker:
-      - image: cimg/base:current
+      - image: cimg/python:3.9  # Use a Python Docker image
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: Run main.py
+          command: python main.py
 
 workflows:
   version: 2
-  scheduled-hello:
+  schedule-workflow:
     triggers:
       - schedule:
-          cron: "00,05,10,15,20,25,30,35,40,45,50,55 * * * *" # Runs every 5 minutes
+          cron: "*/5 * * * *"  # Runs every 5 minutes
           filters:
             branches:
               only:
-                - main # Set to the branch you want this schedule to run on
+                - "<< pipeline.git.branch >>"  # Use the current branch
     jobs:
-      - say-hello
+      - run-script
